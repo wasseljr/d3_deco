@@ -93,10 +93,7 @@ export default function StatsSection() {
         <div className="relative z-10 mx-auto max-w-xl space-y-6 text-center">
           <h2 className="text-4xl font-semibold lg:text-5xl">D3 in numbers</h2>
           <p>
-            D3 Déco is evolving to be more than a workshop — it's a creative space
-            where craftsmanship meets precision. From CNC cutting to fine resin
-            finishes, we've brought ideas to life in over 250 projects across 12
-            cities in Algeria.
+            {'D3 Déco is evolving to be more than a workshop — it\'s a creative space where craftsmanship meets precision. From CNC cutting to fine resin finishes, we\'ve brought ideas to life in over 250 projects across 12 cities in Algeria.'}
           </p>
         </div>
 

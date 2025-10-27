@@ -69,11 +69,11 @@ export default function FeaturesSection() {
                                 
                                 <span className="text-muted-foreground text-xs">Sat 22 Feb</span>
                             </div>
-                            <div className="rounded-(--radius) bg-background mt-1.5 w-3/5 border p-3 text-xs">Hey, I'm having trouble with my delivery.</div>
+                            <div className="rounded-(--radius) bg-background mt-1.5 w-3/5 border p-3 text-xs">{'Hey, I\'m having trouble with my delivery.'}</div>
                         </div>
 
                         <div>
-                            <div className="rounded-(--radius) mb-1 ml-auto w-3/5 bg-blue-600 p-3 text-xs text-white">Hey boss, our team is currently working on identifying the issue. We'll get back to you as soon as it's resolved. Thank you.</div>
+                            <div className="rounded-(--radius) mb-1 ml-auto w-3/5 bg-blue-600 p-3 text-xs text-white">{'Hey boss, our team is currently working on identifying the issue. We\'ll get back to you as soon as it\'s resolved. Thank you.'}</div>
                             <span className="text-muted-foreground block text-right text-xs">Now</span>
                         </div>
                     </div>
