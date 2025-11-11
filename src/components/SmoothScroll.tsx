@@ -14,7 +14,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
         ScrollSmoother.create({
           wrapper: "#smooth-wrapper",
           content: "#smooth-content",
-          smooth: 1.0,
+          smooth: 1.2,
           effects: true,
         });
       }

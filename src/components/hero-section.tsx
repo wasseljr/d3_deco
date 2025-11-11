@@ -68,22 +68,34 @@ function BackgroundWaves() {
 export default function HeroSection() {
   const swiperRef = useRef<SwiperRef>(null);
   const [visibleImages, setVisibleImages] = useState(initialImages);
+  const [isLastSlide, setIsLastSlide] = useState(false);
 
+  /* --------------------------------------------------------------
+     1. Load more images as we swipe
+     2. Detect when we are on the very last slide → show button
+  -------------------------------------------------------------- */
   useEffect(() => {
     const loadMoreImages = () => {
       const swiper = swiperRef.current?.swiper;
-      if (swiper) {
-        const activeIndex = swiper.activeIndex;
-        const newImages = allImages.slice(0, Math.min(activeIndex + 6, allImages.length));
-        if (newImages.length > visibleImages.length) {
-          setVisibleImages(newImages);
-        }
+      if (!swiper) return;
+
+      const activeIndex = swiper.activeIndex;
+      const newImages = allImages.slice(0, Math.min(activeIndex + 6, allImages.length));
+      if (newImages.length > visibleImages.length) {
+        setVisibleImages(newImages);
       }
+
+      // Show button only when the last *available* image is active
+      setIsLastSlide(activeIndex === allImages.length - 1);
     };
+
     const swiper = swiperRef.current?.swiper;
     if (swiper) {
       swiper.on('slideChange', loadMoreImages);
+      // initial check
+      loadMoreImages();
     }
+
     return () => swiper?.off('slideChange', loadMoreImages);
   }, [visibleImages]);
 
@@ -92,6 +104,7 @@ export default function HeroSection() {
       <BackgroundWavesComponent />
       <BackgroundWaves />
 
+      {/* … (all the decorative layers stay unchanged) … */}
       <div
         aria-hidden
         className="absolute inset-0 isolate hidden opacity-65 contain-strict lg:block"
@@ -103,6 +116,7 @@ export default function HeroSection() {
 
       <section>
         <div className="relative pt-8 md:pt-16">
+          {/* background image */}
           <div className="mask-b-from-35% mask-b-to-90% absolute inset-0 top-56 -z-20 lg:top-32">
             <Image
               src="https://ik.imagekit.io/lrigu76hy/tailark/night-background.jpg?updatedAt=1745733451120"
@@ -118,6 +132,7 @@ export default function HeroSection() {
             className="absolute inset-0 -z-10 size-full bg-[var(--color-background)]"
           />
 
+          {/* headline & CTA */}
           <div className="mx-auto max-w-7xl px-6">
             <div className="text-center sm:mx-auto lg:mr-auto lg:mt-0">
               <Link
@@ -154,7 +169,7 @@ export default function HeroSection() {
                 as="p"
                 className="mx-auto mt-8 max-w-2xl text-balance text-lg"
               >
-                🏗 Solid Surface, Alucobond, bois rouge & MDF ⚙ Découpe CNC & finitions de qualité
+                Solid Surface, Alucobond, bois rouge & MDF Découpe CNC & finitions de qualité
               </TextEffect>
 
               <div className="mt-12 flex flex-col items-center justify-center gap-2 md:flex-row">
@@ -172,34 +187,54 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="mask-b-from-55% relative -mr-56 mt-8 overflow-hidden px-2 sm:mr-0 sm:mt-12 md:mt-20">
-            <div className="inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-6xl overflow-hidden rounded-2xl border p-4 shadow-lg shadow-zinc-950/15 ring-1">
-              <Swiper
-                ref={swiperRef}
-                modules={[Navigation]}
-                spaceBetween={0}
-                slidesPerView={1}
-                navigation
-                className="aspect-[16/9] rounded-2xl"
-              >
-                {visibleImages.map((src, index) => (
-                  <SwiperSlide key={index}>
-                    <div className="relative w-full h-full">
-                      <Image
-                        className="bg-background rounded-2xl object-contain"
-                        src={src}
-                        alt={`Hero image ${index + 1}`}
-                        fill
-                        loading={index === 0 ? undefined : 'lazy'}
-                        quality={100}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        placeholder="blur"
-                        blurDataURL="/images/placeholder.jpg"
-                      />
+          
+          <div className="mask-b-from-80% relative mt-8 overflow-hidden px-2 sm:mt-12 md:mt-20">
+            <div className="mx-auto max-w-6xl">
+              <div className="inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative overflow-hidden rounded-2xl border p-4 shadow-lg shadow-zinc-950/15 ring-1">
+                <Swiper
+                  ref={swiperRef}
+                  modules={[Navigation]}
+                  spaceBetween={0}
+                  slidesPerView={1}
+                  navigation
+                  centeredSlides={true}
+                  className="aspect-[16/9] rounded-2xl"
+                >
+                  {visibleImages.map((src, index) => (
+                    <SwiperSlide key={index}>
+                      <div className="relative w-full h-full flex items-center justify-center">
+                        <Image
+                          className="bg-background rounded-2xl object-contain max-w-full max-h-full"
+                          src={src}
+                          alt={`Hero image ${index + 1}`}
+                          fill
+                          loading={index === 0 ? undefined : 'lazy'}
+                          quality={80}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          placeholder="blur"
+                          blurDataURL="/images/placeholder.jpg"
+                        />
+                      </div>
+                    </SwiperSlide>
+                  ))}
+
+                  
+                  {isLastSlide && (
+                    <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                      <Button
+                        asChild
+                        size="lg"
+                        className="pointer-events-auto animate-in fade-in slide-in-from-bottom-4 duration-500"
+                      >
+                        <Link href="/gallery" className="flex items-center gap-2">
+                          View More
+                          <ArrowRight className="size-4" />
+                        </Link>
+                      </Button>
                     </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+                  )}
+                </Swiper>
+              </div>
             </div>
           </div>
         </div>
